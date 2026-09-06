@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Zenith Dynamic Task Workspace</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 20px; }
+    h1 { color: #38bdf8; }
+    .card { background: #1e293b; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+    .metric { font-size: 24px; font-weight: bold; color: #4ade80; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #334155; }
+    th { background: #334155; color: #f1f5f9; }
+    .tag { background: #0284c7; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-right: 4px; }
+  </style>
+</head>
+<body>
+  <h1>⚡ Zenith Dynamic Task Workspace</h1>
+  <div class="card">
+    <h3>📊 AI Productivity Analytics Summary</h3>
+    <p id="ai-summary">Loading analytics...</p>
+    <p>Completion Rate: <span id="rate" class="metric">-</span></p>
+  </div>
+  <div class="card">
+    <h3>📋 Task List</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Priority</th>
+          <th>Category</th>
+          <th>Status</th>
+          <th>Tags</th>
+        </tr>
+      </thead>
+      <tbody id="todo-table">
+      </tbody>
+    </table>
+  </div>
+  <script>
+    async function loadData() {
+      const resTodos = await fetch('/api/todos');
+      const todos = await resTodos.json();
+      const resAnalytics = await fetch('/api/analytics');
+      const analytics = await resAnalytics.json();
+
+      document.getElementById('ai-summary').innerText = analytics.aiSummary;
+      document.getElementById('rate').innerText = analytics.completionRate;
+
+      const tbody = document.getElementById('todo-table');
+      tbody.innerHTML = todos.map(t => `
+        <tr>
+          <td>${t.title}</td>
+          <td>${t.priority}</td>
+          <td>${t.category}</td>
+          <td>${t.completed ? '✅ Done' : '⏳ Pending'}</td>
+          <td>${t.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</td>
+        </tr>
+      `).join('');
+    }
+    loadData();
+  </script>
+</body>
+</html>
