@@ -1,0 +1,1 @@
+#!/bin/bash\ncd part-c-autoresearch\npython src/optimizer.py\n

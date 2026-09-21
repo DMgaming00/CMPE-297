@@ -1,0 +1,10 @@
+{
+  "name": "dsh-plugin-second-brain",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "cordis": {
+    "service": {
+      "implements": ["second_brain"]
+    }
+  }
+}
