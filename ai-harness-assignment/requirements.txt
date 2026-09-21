@@ -1,0 +1,6 @@
+requests
+pytest
+pytest-timeout
+gitpython
+torch
+torchvision
