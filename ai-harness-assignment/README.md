@@ -2,6 +2,8 @@
 
 **Author:** Dev Mulchandani
 
+## Links to all the walkthrough Videos [Drive Link](https://drive.google.com/drive/folders/1exgV6cb_TYAXkiAo41xcQVdFacjJmm8_?usp=sharing)
+
 ## Overview
 This repository contains a comprehensive suite of AI Harness projects, split into three major components:
 1. **Part A (MiniCodePilot):** A custom, from-scratch AI coding harness utilizing the OpenRouter API.
