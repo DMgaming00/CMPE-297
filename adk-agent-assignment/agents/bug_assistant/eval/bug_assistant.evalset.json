@@ -1,0 +1,90 @@
+{
+ "eval_set_id": "bug_assistant_core",
+ "name": "bug_assistant core behaviours",
+ "description": "Hand-written expected tool trajectories (IN_ORDER, args ignored) and reference answers. Requires Gemini credentials to run.",
+ "eval_cases": [
+  {
+   "eval_id": "triage_checkout_500",
+   "conversation": [
+    {
+     "invocation_id": "inv-0",
+     "user_content": {
+      "parts": [
+       {
+        "text": "Checkout returns HTTP 500 after a customer removes a coupon. It started after release 4.12.0 and affects many users in production. Don't create a ticket yet."
+       }
+      ],
+      "role": "user"
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Identifies ticket #1 as the likely duplicate, gives priority from assess_severity, ranked hypotheses (None discount in apply_discount), debugging steps, and recommends commenting on #1 without creating a ticket."
+       }
+      ],
+      "role": "model"
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "args": {},
+        "name": "search_tickets"
+       },
+       {
+        "args": {},
+        "name": "find_duplicate_candidates"
+       },
+       {
+        "args": {},
+        "name": "assess_severity"
+       }
+      ],
+      "tool_responses": [],
+      "intermediate_responses": []
+     },
+     "creation_timestamp": 0.0
+    }
+   ],
+   "creation_timestamp": 0.0,
+   "final_session_state": {}
+  },
+  {
+   "eval_id": "list_p0",
+   "conversation": [
+    {
+     "invocation_id": "inv-0",
+     "user_content": {
+      "parts": [
+       {
+        "text": "Which P0 tickets are open right now?"
+       }
+      ],
+      "role": "user"
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Lists ticket #6 (inventory goes negative) and #10 (session tokens logged in plaintext)."
+       }
+      ],
+      "role": "model"
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "args": {},
+        "name": "list_tickets"
+       }
+      ],
+      "tool_responses": [],
+      "intermediate_responses": []
+     },
+     "creation_timestamp": 0.0
+    }
+   ],
+   "creation_timestamp": 0.0,
+   "final_session_state": {}
+  }
+ ],
+ "creation_timestamp": 0.0
+}

@@ -1,0 +1,267 @@
+# MCP Toolbox for Databases - PRODUCTION backend for Agent C (software bug assistant).
+#
+#   toolbox --config configs/toolbox/bug_tracker_tools.yaml
+#
+# Database: PostgreSQL / Cloud SQL for PostgreSQL / AlloyDB
+# (schema: database/postgres/bug_tracker_schema.sql).
+# Tool names match the local MCP server (agents/bug_assistant/mcp_server), so the ADK
+# agent and its write-approval gate work unchanged. Differences from local mode:
+# * search/duplicate ranking uses PostgreSQL full-text search (ts_rank), not TF-IDF;
+# * create_ticket has no automatic duplicate refusal. The agent's workflow calls
+#   find_duplicate_candidates first.
+kind: source
+name: bug-db
+type: postgres
+host: ${DB_HOST}
+port: ${DB_PORT}
+database: ${BUG_DB_NAME}
+user: ${DB_USER}
+password: ${DB_PASSWORD}
+---
+kind: tool
+name: search_tickets
+type: postgres-sql
+source: bug-db
+description: Full-text search over ticket titles and descriptions, ranked by relevance.
+parameters:
+  - name: query
+    type: string
+    description: Error message, symptom or keywords.
+  - name: status
+    type: string
+    description: Optional status filter (open, in_progress, resolved, closed, duplicate).
+    required: false
+  - name: limit
+    type: integer
+    description: Maximum results (1-20).
+    default: 5
+    minValue: 1
+    maxValue: 20
+statement: |
+  SELECT id, title, status, priority, component, assignee, updated_at,
+         ts_rank(search_vector,
+                 replace(plainto_tsquery('english', $1)::text, ' & ', ' | ')::tsquery) AS score
+  FROM tickets
+  WHERE search_vector @@ replace(plainto_tsquery('english', $1)::text, ' & ', ' | ')::tsquery
+    AND ($2::text IS NULL OR $2 = '' OR status = $2)
+  ORDER BY score DESC
+  LIMIT $3;
+---
+kind: tool
+name: get_ticket
+type: postgres-sql
+source: bug-db
+description: Return one ticket including its comment history (as a JSON array).
+parameters:
+  - name: ticket_id
+    type: integer
+    description: Ticket id.
+statement: |
+  SELECT t.*,
+         COALESCE((SELECT json_agg(json_build_object('author', c.author, 'body', c.body,
+                                                     'created_at', c.created_at)
+                                   ORDER BY c.id)
+                   FROM comments c WHERE c.ticket_id = t.id), '[]'::json) AS comments
+  FROM tickets t WHERE t.id = $1;
+---
+kind: tool
+name: list_tickets
+type: postgres-sql
+source: bug-db
+description: List tickets filtered by status, priority (P0-P3) and/or component.
+parameters:
+  - name: status
+    type: string
+    description: Optional status filter.
+    required: false
+  - name: priority
+    type: string
+    description: Optional priority filter (P0-P3).
+    required: false
+  - name: component
+    type: string
+    description: Optional component slug.
+    required: false
+  - name: limit
+    type: integer
+    description: Maximum results (1-50).
+    default: 10
+    minValue: 1
+    maxValue: 50
+statement: |
+  SELECT id, title, status, priority, component, assignee, updated_at FROM tickets
+  WHERE ($1::text IS NULL OR $1 = '' OR status = $1)
+    AND ($2::text IS NULL OR $2 = '' OR priority = upper($2))
+    AND ($3::text IS NULL OR $3 = '' OR component = lower($3))
+  ORDER BY priority ASC, updated_at DESC
+  LIMIT $4;
+---
+kind: tool
+name: find_duplicate_candidates
+type: postgres-sql
+source: bug-db
+description: Rank existing non-duplicate tickets by similarity to a proposed new ticket.
+parameters:
+  - name: title
+    type: string
+    description: Proposed ticket title.
+  - name: description
+    type: string
+    description: Proposed ticket description.
+    default: ""
+  - name: limit
+    type: integer
+    description: Maximum candidates (1-10).
+    default: 5
+    minValue: 1
+    maxValue: 10
+statement: |
+  SELECT id, title, status, priority, component,
+         ts_rank(search_vector,
+                 replace(plainto_tsquery('english', $1 || ' ' || $2)::text, ' & ', ' | ')
+                 ::tsquery) AS similarity
+  FROM tickets
+  WHERE status <> 'duplicate'
+    AND search_vector @@ replace(plainto_tsquery('english', $1 || ' ' || $2)::text,
+                                 ' & ', ' | ')::tsquery
+  ORDER BY similarity DESC
+  LIMIT $3;
+---
+kind: tool
+name: create_ticket
+type: postgres-sql
+source: bug-db
+description: >
+  WRITE. Create a ticket. Call find_duplicate_candidates first; only create when the user
+  asked for it and confirmed it is not a duplicate.
+parameters:
+  - name: title
+    type: string
+    description: 8-160 characters.
+  - name: description
+    type: string
+    description: Symptoms, environment and reproduction steps.
+  - name: priority
+    type: string
+    description: P0, P1, P2 or P3.
+  - name: component
+    type: string
+    description: Component slug, e.g. checkout.
+  - name: reporter
+    type: string
+    description: Reporter slug.
+    default: bug-assistant
+statement: |
+  INSERT INTO tickets (title, description, status, priority, component, reporter)
+  VALUES ($1, $2, 'open', upper($3), lower($4), lower($5))
+  RETURNING id, title, status, priority, component, created_at;
+---
+kind: tool
+name: update_ticket_status
+type: postgres-sql
+source: bug-db
+description: >
+  WRITE. Change ticket status (allowed transitions enforced by a database trigger) and
+  record an audit comment.
+parameters:
+  - name: ticket_id
+    type: integer
+    description: Ticket id.
+  - name: status
+    type: string
+    description: New status.
+  - name: note
+    type: string
+    description: Reason for the change (audit trail).
+statement: |
+  WITH t AS (
+    UPDATE tickets SET status = lower($2), updated_at = now() WHERE id = $1
+    RETURNING id, status
+  ), c AS (
+    INSERT INTO comments (ticket_id, author, body)
+    SELECT id, 'bug-assistant', 'Status -> ' || status || ': ' || $3 FROM t
+    RETURNING ticket_id
+  )
+  SELECT t.id, t.status FROM t JOIN c ON c.ticket_id = t.id;
+---
+kind: tool
+name: update_ticket_priority
+type: postgres-sql
+source: bug-db
+description: WRITE. Change ticket priority (P0-P3) and record an audit comment.
+parameters:
+  - name: ticket_id
+    type: integer
+    description: Ticket id.
+  - name: priority
+    type: string
+    description: New priority.
+  - name: note
+    type: string
+    description: Reason for the change (audit trail).
+statement: |
+  WITH t AS (
+    UPDATE tickets SET priority = upper($2), updated_at = now() WHERE id = $1
+    RETURNING id, priority
+  ), c AS (
+    INSERT INTO comments (ticket_id, author, body)
+    SELECT id, 'bug-assistant', 'Priority -> ' || priority || ': ' || $3 FROM t
+    RETURNING ticket_id
+  )
+  SELECT t.id, t.priority FROM t JOIN c ON c.ticket_id = t.id;
+---
+kind: tool
+name: add_comment
+type: postgres-sql
+source: bug-db
+description: WRITE. Append a comment to an existing ticket.
+parameters:
+  - name: ticket_id
+    type: integer
+    description: Ticket id.
+  - name: body
+    type: string
+    description: Comment text.
+statement: |
+  INSERT INTO comments (ticket_id, author, body) VALUES ($1, 'bug-assistant', $2)
+  RETURNING ticket_id, body, created_at;
+---
+kind: tool
+name: mark_duplicate
+type: postgres-sql
+source: bug-db
+description: WRITE. Mark ticket_id as a duplicate of duplicate_of with an audit comment.
+parameters:
+  - name: ticket_id
+    type: integer
+    description: Ticket to close as duplicate.
+  - name: duplicate_of
+    type: integer
+    description: Original ticket id.
+  - name: note
+    type: string
+    description: Why they are duplicates.
+statement: |
+  WITH t AS (
+    UPDATE tickets SET status = 'duplicate', duplicate_of = $2, updated_at = now()
+    WHERE id = $1 AND $1 <> $2
+    RETURNING id, duplicate_of
+  ), c AS (
+    INSERT INTO comments (ticket_id, author, body)
+    SELECT id, 'bug-assistant', 'Duplicate of #' || duplicate_of || ': ' || $3 FROM t
+    RETURNING ticket_id
+  )
+  SELECT t.id, t.duplicate_of FROM t JOIN c ON c.ticket_id = t.id;
+---
+kind: toolset
+name: bug-tracker
+tools:
+  - search_tickets
+  - get_ticket
+  - list_tickets
+  - find_duplicate_candidates
+  - create_ticket
+  - update_ticket_status
+  - update_ticket_priority
+  - add_comment
+  - mark_duplicate

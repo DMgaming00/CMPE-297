@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: lint + unit tests (Python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - name: Install
+        run: python -m pip install -e ".[dev]"
+      - name: Compile
+        run: python -m compileall -q agents adk_shared scripts tests
+      - name: Lint
+        run: python -m ruff check .
+      - name: Unit tests (no credentials; LLM replaced by scripted test doubles)
+        run: python -m pytest -q
+      - name: MCP smoke test (real stdio MCP servers)
+        run: python scripts/mcp_smoke.py
+      - name: Preflight (local requirements only)
+        run: python scripts/preflight.py
+
+  docker:
+    name: container build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t adk-production-agents .
+
+  # Credential-dependent checks. Runs only when manually dispatched AND the repository
+  # has the secrets configured; ordinary CI never needs production credentials.
+  integration:
+    name: integration (real Gemini CLI + ADK eval)
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GOOGLE_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GOOGLE_GENAI_USE_VERTEXAI: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm install -g @google/gemini-cli@0.66.0
+      - run: python -m pip install -e ".[dev,eval]"
+      - name: Real Gemini CLI integration test
+        if: env.GEMINI_API_KEY != ''
+        run: RUN_GEMINI_CLI_INTEGRATION=1 python -m pytest -q -m integration
+      - name: ADK eval (e-commerce)
+        if: env.GEMINI_API_KEY != ''
+        run: >
+          adk eval agents/ecommerce agents/ecommerce/eval/ecommerce.evalset.json
+          --config_file_path agents/ecommerce/eval/test_config.json

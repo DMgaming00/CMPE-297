@@ -1,0 +1,119 @@
+{
+ "eval_set_id": "ecommerce_core",
+ "name": "ecommerce core behaviours",
+ "description": "Hand-written expected tool trajectories (IN_ORDER, args ignored) and reference answers. Requires Gemini credentials to run.",
+ "eval_cases": [
+  {
+   "eval_id": "search_budget",
+   "conversation": [
+    {
+     "invocation_id": "inv-0",
+     "user_content": {
+      "parts": [
+       {
+        "text": "Find waterproof jackets under $150."
+       }
+      ],
+      "role": "user"
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Lists the StormShell Rain Jacket (APP-603) at $139.99 with stock, using catalog data only."
+       }
+      ],
+      "role": "model"
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "args": {},
+        "name": "search_products"
+       }
+      ],
+      "tool_responses": [],
+      "intermediate_responses": []
+     },
+     "creation_timestamp": 0.0
+    }
+   ],
+   "creation_timestamp": 0.0,
+   "final_session_state": {}
+  },
+  {
+   "eval_id": "inventory_store",
+   "conversation": [
+    {
+     "invocation_id": "inv-0",
+     "user_content": {
+      "parts": [
+       {
+        "text": "Is FTW-104 in stock at the San Jose store?"
+       }
+      ],
+      "role": "user"
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Says the Velocity Carbon Racer (FTW-104) has 0 units at ST-SJC and offers the online fulfilment centre (2 units)."
+       }
+      ],
+      "role": "model"
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "args": {},
+        "name": "check_inventory"
+       }
+      ],
+      "tool_responses": [],
+      "intermediate_responses": []
+     },
+     "creation_timestamp": 0.0
+    }
+   ],
+   "creation_timestamp": 0.0,
+   "final_session_state": {}
+  },
+  {
+   "eval_id": "quote_before_purchase",
+   "conversation": [
+    {
+     "invocation_id": "inv-0",
+     "user_content": {
+      "parts": [
+       {
+        "text": "I want to buy one HOM-504 shipped from the online store."
+       }
+      ],
+      "role": "user"
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Shows a non-binding quote for 1 x Insulated Bottle 1L at $27.99 and asks the customer to confirm before placing the order. No order is placed."
+       }
+      ],
+      "role": "model"
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "args": {},
+        "name": "prepare_order"
+       }
+      ],
+      "tool_responses": [],
+      "intermediate_responses": []
+     },
+     "creation_timestamp": 0.0
+    }
+   ],
+   "creation_timestamp": 0.0,
+   "final_session_state": {}
+  }
+ ],
+ "creation_timestamp": 0.0
+}

@@ -1,0 +1,1025 @@
+{
+ "_note": "Fictional demo data. All people, emails and stores are invented.",
+ "users": [
+  {
+   "user_id": "cust-alice",
+   "display_name": "Alice Rivera",
+   "email": "alice@example.com",
+   "city": "San Jose"
+  },
+  {
+   "user_id": "cust-bob",
+   "display_name": "Bob Chen",
+   "email": "bob@example.com",
+   "city": "San Francisco"
+  },
+  {
+   "user_id": "cust-carol",
+   "display_name": "Carol Okafor",
+   "email": "carol@example.com",
+   "city": "Seattle"
+  },
+  {
+   "user_id": "cust-dan",
+   "display_name": "Dan Patel",
+   "email": "dan@example.com",
+   "city": "Oakland"
+  }
+ ],
+ "stores": [
+  {
+   "store_id": "ST-SJC",
+   "name": "San Jose Downtown",
+   "city": "San Jose",
+   "address": "100 Market Plaza, San Jose, CA",
+   "hours": "9:00-21:00"
+  },
+  {
+   "store_id": "ST-SFO",
+   "name": "San Francisco Union Square",
+   "city": "San Francisco",
+   "address": "250 Geary Walk, San Francisco, CA",
+   "hours": "10:00-20:00"
+  },
+  {
+   "store_id": "ST-OAK",
+   "name": "Oakland Lakeside",
+   "city": "Oakland",
+   "address": "77 Lakeshore Ave, Oakland, CA",
+   "hours": "10:00-19:00"
+  },
+  {
+   "store_id": "ST-SEA",
+   "name": "Seattle Pike Street",
+   "city": "Seattle",
+   "address": "12 Pike Lane, Seattle, WA",
+   "hours": "9:00-20:00"
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "name": "Online Fulfillment Center",
+   "city": "Online",
+   "address": "Ships nationwide",
+   "hours": "24/7"
+  }
+ ],
+ "products": [
+  {
+   "sku": "FTW-101",
+   "name": "AeroRun Trainer",
+   "brand": "Stridewell",
+   "category": "footwear",
+   "description": "Lightweight neutral running shoe with breathable mesh upper.",
+   "price_cents": 8999,
+   "tags": [
+    "running",
+    "shoes",
+    "road"
+   ]
+  },
+  {
+   "sku": "FTW-102",
+   "name": "Summit Trail Shoe",
+   "brand": "Ridgeline",
+   "category": "footwear",
+   "description": "Waterproof trail runner with aggressive lug outsole.",
+   "price_cents": 11999,
+   "tags": [
+    "trail",
+    "hiking",
+    "running",
+    "waterproof"
+   ]
+  },
+  {
+   "sku": "FTW-103",
+   "name": "CityStep Walker",
+   "brand": "Stridewell",
+   "category": "footwear",
+   "description": "Cushioned everyday walking shoe with wide toe box.",
+   "price_cents": 6499,
+   "tags": [
+    "walking",
+    "shoes",
+    "comfort"
+   ]
+  },
+  {
+   "sku": "FTW-104",
+   "name": "Velocity Carbon Racer",
+   "brand": "Pacefield",
+   "category": "footwear",
+   "description": "Carbon-plated racing shoe for 5K to marathon.",
+   "price_cents": 21999,
+   "tags": [
+    "running",
+    "racing",
+    "carbon"
+   ]
+  },
+  {
+   "sku": "OUT-201",
+   "name": "Nimbus 2P Tent",
+   "brand": "Ridgeline",
+   "category": "outdoor",
+   "description": "Two-person freestanding backpacking tent, 1.6 kg.",
+   "price_cents": 28999,
+   "tags": [
+    "camping",
+    "tent",
+    "backpacking"
+   ]
+  },
+  {
+   "sku": "OUT-202",
+   "name": "TrailPack 35L",
+   "brand": "Ridgeline",
+   "category": "outdoor",
+   "description": "35-liter daypack with hydration sleeve and rain cover.",
+   "price_cents": 9499,
+   "tags": [
+    "hiking",
+    "backpack",
+    "daypack"
+   ]
+  },
+  {
+   "sku": "OUT-203",
+   "name": "Glacier Down Jacket",
+   "brand": "Northwind",
+   "category": "outdoor",
+   "description": "800-fill down jacket rated to -10C.",
+   "price_cents": 24999,
+   "tags": [
+    "jacket",
+    "winter",
+    "down"
+   ]
+  },
+  {
+   "sku": "OUT-204",
+   "name": "Headlamp 400",
+   "brand": "Lumora",
+   "category": "outdoor",
+   "description": "Rechargeable 400-lumen headlamp, USB-C.",
+   "price_cents": 3999,
+   "tags": [
+    "camping",
+    "light",
+    "running"
+   ]
+  },
+  {
+   "sku": "FIT-301",
+   "name": "FlexCore Yoga Mat",
+   "brand": "Calmora",
+   "category": "fitness",
+   "description": "6mm non-slip yoga mat with carry strap.",
+   "price_cents": 4599,
+   "tags": [
+    "yoga",
+    "mat",
+    "home gym"
+   ]
+  },
+  {
+   "sku": "FIT-302",
+   "name": "Adjustable Dumbbell Set",
+   "brand": "IronBay",
+   "category": "fitness",
+   "description": "Pair of adjustable dumbbells, 2-24 kg each.",
+   "price_cents": 34999,
+   "tags": [
+    "weights",
+    "strength",
+    "home gym"
+   ]
+  },
+  {
+   "sku": "FIT-303",
+   "name": "Resistance Band Kit",
+   "brand": "IronBay",
+   "category": "fitness",
+   "description": "Five latex-free resistance bands with door anchor.",
+   "price_cents": 2999,
+   "tags": [
+    "bands",
+    "strength",
+    "travel"
+   ]
+  },
+  {
+   "sku": "FIT-304",
+   "name": "Pulse Smart Jump Rope",
+   "brand": "Pacefield",
+   "category": "fitness",
+   "description": "Bluetooth jump rope that counts reps and calories.",
+   "price_cents": 3499,
+   "tags": [
+    "cardio",
+    "smart",
+    "rope"
+   ]
+  },
+  {
+   "sku": "ELC-401",
+   "name": "Pulse GPS Watch",
+   "brand": "Pacefield",
+   "category": "electronics",
+   "description": "GPS running watch with heart-rate and 14-day battery.",
+   "price_cents": 19999,
+   "tags": [
+    "running",
+    "watch",
+    "gps",
+    "smart"
+   ]
+  },
+  {
+   "sku": "ELC-402",
+   "name": "SoundTrail Earbuds",
+   "brand": "Lumora",
+   "category": "electronics",
+   "description": "Sweat-resistant wireless earbuds with ear hooks.",
+   "price_cents": 7999,
+   "tags": [
+    "audio",
+    "running",
+    "wireless"
+   ]
+  },
+  {
+   "sku": "ELC-403",
+   "name": "PowerCell 20K",
+   "brand": "Lumora",
+   "category": "electronics",
+   "description": "20,000 mAh USB-C power bank, 65W.",
+   "price_cents": 4999,
+   "tags": [
+    "battery",
+    "travel",
+    "camping"
+   ]
+  },
+  {
+   "sku": "ELC-404",
+   "name": "HomeHub Smart Scale",
+   "brand": "Calmora",
+   "category": "electronics",
+   "description": "Wi-Fi body composition scale with app sync.",
+   "price_cents": 5999,
+   "tags": [
+    "scale",
+    "smart",
+    "health"
+   ]
+  },
+  {
+   "sku": "HOM-501",
+   "name": "BrewMaster Pour-Over Kit",
+   "brand": "Kettlecraft",
+   "category": "home",
+   "description": "Glass dripper, gooseneck kettle and 100 filters.",
+   "price_cents": 5499,
+   "tags": [
+    "coffee",
+    "kitchen"
+   ]
+  },
+  {
+   "sku": "HOM-502",
+   "name": "ChefEdge Knife Set",
+   "brand": "Kettlecraft",
+   "category": "home",
+   "description": "Five-piece stainless steel knife set with block.",
+   "price_cents": 12999,
+   "tags": [
+    "kitchen",
+    "knives"
+   ]
+  },
+  {
+   "sku": "HOM-503",
+   "name": "AirPure Mini Purifier",
+   "brand": "Calmora",
+   "category": "home",
+   "description": "HEPA desktop air purifier for rooms up to 20 m2.",
+   "price_cents": 8999,
+   "tags": [
+    "air",
+    "home",
+    "health"
+   ]
+  },
+  {
+   "sku": "HOM-504",
+   "name": "Insulated Bottle 1L",
+   "brand": "Northwind",
+   "category": "home",
+   "description": "Double-wall insulated steel bottle, 24h cold.",
+   "price_cents": 2799,
+   "tags": [
+    "bottle",
+    "hydration",
+    "hiking"
+   ]
+  },
+  {
+   "sku": "APP-601",
+   "name": "DryFit Running Tee",
+   "brand": "Stridewell",
+   "category": "apparel",
+   "description": "Moisture-wicking short-sleeve running shirt.",
+   "price_cents": 2999,
+   "tags": [
+    "running",
+    "shirt",
+    "apparel"
+   ]
+  },
+  {
+   "sku": "APP-602",
+   "name": "Thermal Base Layer",
+   "brand": "Northwind",
+   "category": "apparel",
+   "description": "Merino wool long-sleeve base layer.",
+   "price_cents": 6999,
+   "tags": [
+    "winter",
+    "merino",
+    "hiking"
+   ]
+  },
+  {
+   "sku": "APP-603",
+   "name": "StormShell Rain Jacket",
+   "brand": "Ridgeline",
+   "category": "apparel",
+   "description": "Packable 2.5-layer waterproof rain jacket.",
+   "price_cents": 13999,
+   "tags": [
+    "jacket",
+    "rain",
+    "hiking",
+    "waterproof"
+   ]
+  },
+  {
+   "sku": "APP-604",
+   "name": "Compression Running Tights",
+   "brand": "Pacefield",
+   "category": "apparel",
+   "description": "Full-length compression tights with zip pocket.",
+   "price_cents": 5999,
+   "tags": [
+    "running",
+    "tights",
+    "apparel"
+   ]
+  }
+ ],
+ "inventory": [
+  {
+   "store_id": "ST-SJC",
+   "sku": "FTW-101",
+   "quantity": 0
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "FTW-101",
+   "quantity": 5
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "FTW-101",
+   "quantity": 10
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "FTW-101",
+   "quantity": 2
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "FTW-101",
+   "quantity": 40
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "FTW-102",
+   "quantity": 7
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "FTW-102",
+   "quantity": 12
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "FTW-102",
+   "quantity": 4
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "FTW-102",
+   "quantity": 9
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "FTW-102",
+   "quantity": 41
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "FTW-103",
+   "quantity": 1
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "FTW-103",
+   "quantity": 6
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "FTW-103",
+   "quantity": 11
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "FTW-103",
+   "quantity": 3
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "FTW-103",
+   "quantity": 42
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "FTW-104",
+   "quantity": 0
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "FTW-104",
+   "quantity": 0
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "FTW-104",
+   "quantity": 0
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "FTW-104",
+   "quantity": 0
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "FTW-104",
+   "quantity": 2
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "OUT-201",
+   "quantity": 1
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "OUT-201",
+   "quantity": 0
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "OUT-201",
+   "quantity": 0
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "OUT-201",
+   "quantity": 0
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "OUT-201",
+   "quantity": 0
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "OUT-202",
+   "quantity": 9
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "OUT-202",
+   "quantity": 1
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "OUT-202",
+   "quantity": 6
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "OUT-202",
+   "quantity": 11
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "OUT-202",
+   "quantity": 45
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "OUT-203",
+   "quantity": 3
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "OUT-203",
+   "quantity": 8
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "OUT-203",
+   "quantity": 0
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "OUT-203",
+   "quantity": 5
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "OUT-203",
+   "quantity": 46
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "OUT-204",
+   "quantity": 10
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "OUT-204",
+   "quantity": 2
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "OUT-204",
+   "quantity": 7
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "OUT-204",
+   "quantity": 12
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "OUT-204",
+   "quantity": 47
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "FIT-301",
+   "quantity": 4
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "FIT-301",
+   "quantity": 9
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "FIT-301",
+   "quantity": 1
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "FIT-301",
+   "quantity": 6
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "FIT-301",
+   "quantity": 48
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "FIT-302",
+   "quantity": 11
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "FIT-302",
+   "quantity": 3
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "FIT-302",
+   "quantity": 8
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "FIT-302",
+   "quantity": 0
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "FIT-302",
+   "quantity": 49
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "FIT-303",
+   "quantity": 5
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "FIT-303",
+   "quantity": 10
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "FIT-303",
+   "quantity": 2
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "FIT-303",
+   "quantity": 7
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "FIT-303",
+   "quantity": 50
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "FIT-304",
+   "quantity": 12
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "FIT-304",
+   "quantity": 4
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "FIT-304",
+   "quantity": 9
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "FIT-304",
+   "quantity": 1
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "FIT-304",
+   "quantity": 51
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "ELC-401",
+   "quantity": 6
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "ELC-401",
+   "quantity": 11
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "ELC-401",
+   "quantity": 3
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "ELC-401",
+   "quantity": 8
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "ELC-401",
+   "quantity": 52
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "ELC-402",
+   "quantity": 0
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "ELC-402",
+   "quantity": 5
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "ELC-402",
+   "quantity": 10
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "ELC-402",
+   "quantity": 2
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "ELC-402",
+   "quantity": 53
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "ELC-403",
+   "quantity": 7
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "ELC-403",
+   "quantity": 12
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "ELC-403",
+   "quantity": 4
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "ELC-403",
+   "quantity": 9
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "ELC-403",
+   "quantity": 54
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "ELC-404",
+   "quantity": 1
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "ELC-404",
+   "quantity": 6
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "ELC-404",
+   "quantity": 11
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "ELC-404",
+   "quantity": 3
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "ELC-404",
+   "quantity": 55
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "HOM-501",
+   "quantity": 8
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "HOM-501",
+   "quantity": 0
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "HOM-501",
+   "quantity": 5
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "HOM-501",
+   "quantity": 10
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "HOM-501",
+   "quantity": 56
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "HOM-502",
+   "quantity": 2
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "HOM-502",
+   "quantity": 7
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "HOM-502",
+   "quantity": 12
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "HOM-502",
+   "quantity": 4
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "HOM-502",
+   "quantity": 57
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "HOM-503",
+   "quantity": 9
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "HOM-503",
+   "quantity": 1
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "HOM-503",
+   "quantity": 6
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "HOM-503",
+   "quantity": 11
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "HOM-503",
+   "quantity": 58
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "HOM-504",
+   "quantity": 3
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "HOM-504",
+   "quantity": 8
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "HOM-504",
+   "quantity": 0
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "HOM-504",
+   "quantity": 5
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "HOM-504",
+   "quantity": 59
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "APP-601",
+   "quantity": 10
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "APP-601",
+   "quantity": 2
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "APP-601",
+   "quantity": 7
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "APP-601",
+   "quantity": 12
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "APP-601",
+   "quantity": 60
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "APP-602",
+   "quantity": 4
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "APP-602",
+   "quantity": 9
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "APP-602",
+   "quantity": 1
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "APP-602",
+   "quantity": 6
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "APP-602",
+   "quantity": 61
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "APP-603",
+   "quantity": 11
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "APP-603",
+   "quantity": 3
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "APP-603",
+   "quantity": 8
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "APP-603",
+   "quantity": 0
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "APP-603",
+   "quantity": 62
+  },
+  {
+   "store_id": "ST-SJC",
+   "sku": "APP-604",
+   "quantity": 5
+  },
+  {
+   "store_id": "ST-SFO",
+   "sku": "APP-604",
+   "quantity": 10
+  },
+  {
+   "store_id": "ST-OAK",
+   "sku": "APP-604",
+   "quantity": 2
+  },
+  {
+   "store_id": "ST-SEA",
+   "sku": "APP-604",
+   "quantity": 7
+  },
+  {
+   "store_id": "WH-ONLINE",
+   "sku": "APP-604",
+   "quantity": 63
+  }
+ ],
+ "orders": [
+  {
+   "order_id": "ORD-1001",
+   "user_id": "cust-alice",
+   "sku": "FTW-101",
+   "store_id": "WH-ONLINE",
+   "quantity": 1,
+   "unit_price_cents": 8999,
+   "status": "delivered",
+   "created_at": "2026-09-02T17:20:00Z"
+  },
+  {
+   "order_id": "ORD-1002",
+   "user_id": "cust-alice",
+   "sku": "ELC-402",
+   "store_id": "WH-ONLINE",
+   "quantity": 1,
+   "unit_price_cents": 7999,
+   "status": "shipped",
+   "created_at": "2026-10-20T15:05:00Z"
+  },
+  {
+   "order_id": "ORD-1003",
+   "user_id": "cust-bob",
+   "sku": "FIT-302",
+   "store_id": "ST-SFO",
+   "quantity": 1,
+   "unit_price_cents": 34999,
+   "status": "processing",
+   "created_at": "2026-10-27T09:45:00Z"
+  },
+  {
+   "order_id": "ORD-1004",
+   "user_id": "cust-carol",
+   "sku": "OUT-203",
+   "store_id": "ST-SEA",
+   "quantity": 1,
+   "unit_price_cents": 24999,
+   "status": "processing",
+   "created_at": "2026-10-28T11:30:00Z"
+  }
+ ]
+}

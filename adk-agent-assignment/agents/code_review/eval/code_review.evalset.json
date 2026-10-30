@@ -1,0 +1,45 @@
+{
+ "eval_set_id": "code_review_core",
+ "name": "code_review core behaviours",
+ "description": "Hand-written expected tool trajectories (IN_ORDER, args ignored) and reference answers. Requires Gemini credentials to run.",
+ "eval_cases": [
+  {
+   "eval_id": "review_vulnerable_fixture",
+   "conversation": [
+    {
+     "invocation_id": "inv-0",
+     "user_content": {
+      "parts": [
+       {
+        "text": "Review vulnerable_app.py from the workspace."
+       }
+      ],
+      "role": "user"
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "REQUEST_CHANGES. P0 findings include SQL injection in get_user, shell command injection in ping and eval in calculate; P1 findings include pickle deserialization, path traversal, SSRF, disabled TLS verification, unsafe yaml.load, MD5 password hashing, a hard-coded password and Flask debug mode."
+       }
+      ],
+      "role": "model"
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "args": {},
+        "name": "load_workspace_files"
+       }
+      ],
+      "tool_responses": [],
+      "intermediate_responses": []
+     },
+     "creation_timestamp": 0.0
+    }
+   ],
+   "creation_timestamp": 0.0,
+   "final_session_state": {}
+  }
+ ],
+ "creation_timestamp": 0.0
+}
