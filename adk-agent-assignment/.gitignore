@@ -1,0 +1,46 @@
+# Secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*credentials*.json
+*service-account*.json
+application_default_credentials.json
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Tool caches and coverage
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Local demo state (SQLite databases, temporary clones)
+.local_state/
+*.db
+*.sqlite
+*.sqlite3
+tmp/
+adk-gemini-*/
+
+# ADK local artifacts
+.adk/
+*.evalset_result.json
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
