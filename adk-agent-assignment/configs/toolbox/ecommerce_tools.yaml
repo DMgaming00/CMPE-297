@@ -1,0 +1,315 @@
+# MCP Toolbox for Databases - PRODUCTION backend for Agent E (e-commerce).
+#
+#   toolbox --config configs/toolbox/ecommerce_tools.yaml          # serves MCP on :5000
+#   toolbox --config configs/toolbox/ecommerce_tools.yaml --ui     # interactive test UI
+#
+# Database: PostgreSQL 15+ or AlloyDB for PostgreSQL. For AlloyDB, run the AlloyDB Auth
+# Proxy (or use private IP) and point DB_HOST/DB_PORT at it. Toolbox also has a native
+# `alloydb-postgres` source type with IAM auth (see docs/DEPLOYMENT.md).
+# Schema + seed data: database/postgres/ecommerce_schema.sql, ecommerce_seed.sql.
+#
+# Security model
+# * Only parameterised SQL. The model cannot send arbitrary SQL.
+# * Customer identity (`user_email`) is NEVER a model-controlled parameter: Toolbox
+#   verifies the caller's Google ID token and fills it from the `email` claim.
+# * place_order is a single atomic statement. inventory.quantity has CHECK (>= 0), so an
+#   oversell aborts the whole statement (quote, stock and order all roll back).
+# * Connect as the least-privilege role `commerce_app` (see the schema file).
+# * Tool names and arguments match the local MCP server, so the ADK agent's guardrails
+#   (human confirmation for place_order / cancel_order) apply unchanged.
+# Config format: Toolbox v1 manifest (kind/name/type), checked against the Toolbox docs on
+# 2026-10-29.
+kind: authService
+name: google-signin
+type: google
+clientId: ${GOOGLE_OAUTH_CLIENT_ID}
+---
+kind: source
+name: commerce-db
+type: postgres
+host: ${DB_HOST}
+port: ${DB_PORT}
+database: ${DB_NAME}
+user: ${DB_USER}
+password: ${DB_PASSWORD}
+---
+kind: tool
+name: search_products
+type: postgres-sql
+source: commerce-db
+description: >
+  Search the catalog with keywords (any keyword may match; results ranked by relevance).
+  Optionally filter by exact category (footwear, outdoor, fitness, electronics, home,
+  apparel) and maximum unit price in US dollars.
+parameters:
+  - name: query
+    type: string
+    description: Keywords such as "waterproof trail shoes".
+  - name: category
+    type: string
+    description: Optional exact category.
+    required: false
+  - name: max_price
+    type: float
+    description: Optional maximum unit price in US dollars.
+    required: false
+  - name: limit
+    type: integer
+    description: Maximum number of results (1-20).
+    default: 10
+    minValue: 1
+    maxValue: 20
+statement: |
+  SELECT p.sku, p.name, p.brand, p.category, p.price_cents,
+         '$' || to_char(p.price_cents / 100.0, 'FM999,990.00') AS price,
+         COALESCE(SUM(i.quantity), 0) AS total_stock,
+         ts_rank(p.search_vector,
+                 replace(plainto_tsquery('english', $1)::text, ' & ', ' | ')::tsquery) AS relevance
+  FROM products p
+  LEFT JOIN inventory i ON i.sku = p.sku
+  WHERE p.active
+    AND p.search_vector @@ replace(plainto_tsquery('english', $1)::text, ' & ', ' | ')::tsquery
+    AND ($2::text IS NULL OR $2 = '' OR lower(p.category) = lower($2))
+    AND ($3::float8 IS NULL OR p.price_cents <= round($3 * 100))
+  GROUP BY p.sku
+  ORDER BY relevance DESC, p.price_cents ASC
+  LIMIT $4;
+---
+kind: tool
+name: get_product_details
+type: postgres-sql
+source: commerce-db
+description: Return full details for one product SKU (e.g. FTW-101).
+parameters:
+  - name: sku
+    type: string
+    description: Product SKU.
+statement: |
+  SELECT p.sku, p.name, p.brand, p.category, p.description, p.tags,
+         '$' || to_char(p.price_cents / 100.0, 'FM999,990.00') AS price,
+         COALESCE(SUM(i.quantity), 0) AS total_stock
+  FROM products p LEFT JOIN inventory i ON i.sku = p.sku
+  WHERE p.sku = upper($1) AND p.active
+  GROUP BY p.sku;
+---
+kind: tool
+name: check_inventory
+type: postgres-sql
+source: commerce-db
+description: Return stock for a SKU at every store, or only at store_id when given.
+parameters:
+  - name: sku
+    type: string
+    description: Product SKU.
+  - name: store_id
+    type: string
+    description: Optional store id such as ST-SJC or WH-ONLINE.
+    required: false
+statement: |
+  SELECT s.store_id, s.name AS store_name, s.city, i.quantity, i.quantity > 0 AS in_stock
+  FROM inventory i JOIN stores s ON s.store_id = i.store_id
+  WHERE i.sku = upper($1) AND ($2::text IS NULL OR $2 = '' OR s.store_id = upper($2))
+  ORDER BY i.quantity DESC;
+---
+kind: tool
+name: find_stores
+type: postgres-sql
+source: commerce-db
+description: List stores, optionally filtered by city. WH-ONLINE ships nationwide.
+parameters:
+  - name: city
+    type: string
+    description: Optional city name.
+    required: false
+statement: |
+  SELECT store_id, name, city, address, hours FROM stores
+  WHERE $1::text IS NULL OR $1 = '' OR lower(city) = lower($1)
+  ORDER BY city;
+---
+kind: tool
+name: prepare_order
+type: postgres-sql
+source: commerce-db
+description: >
+  Create a NON-BINDING 15-minute quote for the signed-in customer. Does not charge or
+  reserve stock. Returns no row if the SKU/store is unknown or stock is insufficient
+  (use check_inventory to explain why).
+parameters:
+  - name: user_email
+    type: string
+    description: Auto-populated from the verified Google ID token.
+    authServices:
+      - name: google-signin
+        field: email
+  - name: sku
+    type: string
+    description: Product SKU.
+  - name: quantity
+    type: integer
+    description: Units to buy (1-10).
+    minValue: 1
+    maxValue: 10
+  - name: store_id
+    type: string
+    description: Fulfilling store id (default WH-ONLINE).
+    default: WH-ONLINE
+statement: |
+  WITH caller AS (SELECT user_id FROM users WHERE email = $1),
+       p AS (SELECT sku, name, price_cents FROM products WHERE sku = upper($2) AND active),
+       inv AS (SELECT quantity FROM inventory WHERE sku = upper($2) AND store_id = upper($4))
+  INSERT INTO quotes (quote_id, user_id, sku, store_id, quantity, unit_price_cents,
+                      total_cents, status, created_at, expires_at)
+  SELECT 'Q-' || upper(substr(md5(gen_random_uuid()::text), 1, 12)), caller.user_id, p.sku,
+         upper($4), $3, p.price_cents, p.price_cents * $3, 'open', now(),
+         now() + interval '15 minutes'
+  FROM caller, p, inv
+  WHERE inv.quantity >= $3
+  RETURNING quote_id, sku, store_id, quantity,
+            (SELECT name FROM p) AS product_name,
+            '$' || to_char(unit_price_cents / 100.0, 'FM999,990.00') AS unit_price,
+            '$' || to_char(total_cents / 100.0, 'FM999,990.00') AS total,
+            expires_at;
+---
+kind: tool
+name: place_order
+type: postgres-sql
+source: commerce-db
+description: >
+  CONSEQUENTIAL. Place the order for a prepared quote of the signed-in customer. Only call
+  after the customer explicitly approves. Returns no row if the quote is unknown, expired
+  or already used (call list_my_orders to find an existing order).
+parameters:
+  - name: user_email
+    type: string
+    description: Auto-populated from the verified Google ID token.
+    authServices:
+      - name: google-signin
+        field: email
+  - name: quote_id
+    type: string
+    description: quote_id returned by prepare_order.
+statement: |
+  WITH caller AS (SELECT user_id FROM users WHERE email = $1),
+       q AS (
+         UPDATE quotes
+            SET status = 'consumed',
+                order_id = 'ORD-' || upper(substr(md5(gen_random_uuid()::text), 1, 8))
+          WHERE quote_id = upper($2)
+            AND user_id = (SELECT user_id FROM caller)
+            AND status = 'open'
+            AND expires_at > now()
+          RETURNING *
+       ),
+       stock AS (
+         UPDATE inventory i SET quantity = i.quantity - q.quantity
+           FROM q
+          WHERE i.store_id = q.store_id AND i.sku = q.sku
+          RETURNING i.sku
+       )
+  INSERT INTO orders (order_id, user_id, quote_id, sku, store_id, quantity,
+                      unit_price_cents, total_cents, status, created_at, updated_at)
+  SELECT q.order_id, q.user_id, q.quote_id, q.sku, q.store_id, q.quantity,
+         q.unit_price_cents, q.total_cents, 'processing', now(), now()
+  FROM q JOIN stock ON stock.sku = q.sku
+  RETURNING order_id, status, sku, quantity,
+            '$' || to_char(total_cents / 100.0, 'FM999,990.00') AS total;
+---
+kind: tool
+name: list_my_orders
+type: postgres-sql
+source: commerce-db
+description: List the signed-in customer's most recent orders.
+parameters:
+  - name: user_email
+    type: string
+    description: Auto-populated from the verified Google ID token.
+    authServices:
+      - name: google-signin
+        field: email
+  - name: limit
+    type: integer
+    description: Maximum number of orders (1-50).
+    default: 10
+    minValue: 1
+    maxValue: 50
+statement: |
+  SELECT o.order_id, o.status, o.sku, p.name AS product_name, s.name AS store, o.quantity,
+         '$' || to_char(o.total_cents / 100.0, 'FM999,990.00') AS total, o.created_at
+  FROM orders o
+  JOIN users u ON u.user_id = o.user_id
+  JOIN products p ON p.sku = o.sku
+  JOIN stores s ON s.store_id = o.store_id
+  WHERE u.email = $1
+  ORDER BY o.created_at DESC
+  LIMIT $2;
+---
+kind: tool
+name: get_order_status
+type: postgres-sql
+source: commerce-db
+description: Return one of the signed-in customer's orders. No row means not found.
+parameters:
+  - name: user_email
+    type: string
+    description: Auto-populated from the verified Google ID token.
+    authServices:
+      - name: google-signin
+        field: email
+  - name: order_id
+    type: string
+    description: Order id such as ORD-1001.
+statement: |
+  SELECT o.order_id, o.status, o.sku, p.name AS product_name, s.name AS store, o.quantity,
+         '$' || to_char(o.total_cents / 100.0, 'FM999,990.00') AS total, o.created_at, o.updated_at
+  FROM orders o
+  JOIN users u ON u.user_id = o.user_id
+  JOIN products p ON p.sku = o.sku
+  JOIN stores s ON s.store_id = o.store_id
+  WHERE u.email = $1 AND o.order_id = upper($2);
+---
+kind: tool
+name: cancel_order
+type: postgres-sql
+source: commerce-db
+description: >
+  CONSEQUENTIAL. Cancel one of the signed-in customer's PROCESSING orders and restock it.
+  Only call after explicit customer approval. No row means not found or not cancellable.
+parameters:
+  - name: user_email
+    type: string
+    description: Auto-populated from the verified Google ID token.
+    authServices:
+      - name: google-signin
+        field: email
+  - name: order_id
+    type: string
+    description: Order id to cancel.
+statement: |
+  WITH caller AS (SELECT user_id FROM users WHERE email = $1),
+       o AS (
+         UPDATE orders SET status = 'cancelled', updated_at = now()
+          WHERE order_id = upper($2)
+            AND user_id = (SELECT user_id FROM caller)
+            AND status = 'processing'
+          RETURNING *
+       ),
+       restock AS (
+         UPDATE inventory i SET quantity = i.quantity + o.quantity
+           FROM o
+          WHERE i.store_id = o.store_id AND i.sku = o.sku
+          RETURNING i.sku
+       )
+  SELECT o.order_id, o.status FROM o JOIN restock ON restock.sku = o.sku;
+---
+kind: toolset
+name: commerce
+tools:
+  - search_products
+  - get_product_details
+  - check_inventory
+  - find_stores
+  - prepare_order
+  - place_order
+  - list_my_orders
+  - get_order_status
+  - cancel_order

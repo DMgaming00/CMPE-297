@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "google-adk-production-agents"
+version = "1.0.0"
+description = "Five production-style Google ADK agents: deep-research lead generation, Gemini CLI orchestration, MCP bug assistance, code review and MCP Toolbox e-commerce."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+# Developed and tested against google-adk 2.13.0 and mcp 2.3.0.
+# - google-adk is capped below 3 because ADK has made breaking changes across majors.
+# - mcp>=2 is required: the local MCP servers use `mcp.server.mcpserver.MCPServer`,
+#   the MCP SDK 2.x replacement for the 1.x `FastMCP` class.
+dependencies = [
+  "google-adk[mcp]>=2.13,<3",
+  "mcp>=2.0,<3",
+  "pydantic>=2.8,<3",
+  "python-dotenv>=1.0",
+  "pycodestyle>=2.12",
+]
+
+[project.optional-dependencies]
+# Production MCP Toolbox client (ToolboxToolset -> toolbox-adk).
+production = ["google-adk[toolbox]>=2.13,<3"]
+# `adk eval` metrics dependencies.
+eval = ["google-adk[eval]>=2.13,<3"]
+dev = [
+  "pytest>=8.0",
+  "pytest-asyncio>=0.24",
+  "ruff>=0.6",
+  "pyyaml>=6.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["agents*", "adk_shared*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.json", "*.sql", "*.md"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["agents", "adk_shared", "tests"]
+asyncio_mode = "auto"
+faulthandler_timeout = 120
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+  "integration: needs external credentials/binaries; skipped unless explicitly enabled",
+]
+filterwarnings = [
+  "ignore::DeprecationWarning",
+  "ignore::UserWarning",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = [
+  # Deliberately vulnerable/flawed code used as Code Review fixtures.
+  "data/demo/code_review",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "SIM", "RUF"]
+ignore = [
+  "S101",   # assert is fine in tests
+  "RUF001", # allow unicode in prompts/docs strings
+  "RUF012",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/**" = ["S", "B011"]
+"tests/**" = ["S"]
+"scripts/**" = ["S603", "S607"]

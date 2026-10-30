@@ -1,0 +1,195 @@
+{
+ "_note": "Fictional demo tickets for Agent C. People and systems are invented.",
+ "tickets": [
+  {
+   "id": 1,
+   "title": "Checkout returns HTTP 500 when coupon is removed",
+   "description": "POST /api/cart/checkout fails with 500 after the user applies and then removes a coupon. Stack trace shows TypeError: unsupported operand type(s) for -: 'float' and 'NoneType' in pricing/discounts.py apply_discount. Started after release 4.12.0.",
+   "status": "open",
+   "priority": "P1",
+   "component": "checkout",
+   "reporter": "maria.lopez",
+   "assignee": "dev.kim",
+   "created_at": "2026-10-21T09:12:00Z"
+  },
+  {
+   "id": 2,
+   "title": "Login redirect loop with expired session cookie",
+   "description": "Users with an expired session cookie are redirected between /login and /dashboard indefinitely. Clearing cookies fixes it. Affects Safari 18 and Chrome 131. Middleware does not clear the stale cookie.",
+   "status": "in_progress",
+   "priority": "P2",
+   "component": "auth",
+   "reporter": "tom.nguyen",
+   "assignee": "ana.silva",
+   "created_at": "2026-10-18T14:03:00Z"
+  },
+  {
+   "id": 3,
+   "title": "Password reset emails not delivered for Outlook domains",
+   "description": "Reset emails to outlook.com and hotmail.com addresses are never received. SMTP logs show 550 5.7.1 rejection: SPF check failed for mail-02 relay.",
+   "status": "open",
+   "priority": "P1",
+   "component": "notifications",
+   "reporter": "support-bot",
+   "assignee": "",
+   "created_at": "2026-10-25T08:40:00Z"
+  },
+  {
+   "id": 4,
+   "title": "Search results page slow for queries with special characters",
+   "description": "Search latency exceeds 8 seconds when the query contains '&' or '%'. The ORM builds an unindexed LIKE query instead of using the full-text index.",
+   "status": "open",
+   "priority": "P2",
+   "component": "search",
+   "reporter": "li.wei",
+   "assignee": "",
+   "created_at": "2026-10-12T17:20:00Z"
+  },
+  {
+   "id": 5,
+   "title": "Mobile app crashes on Android 15 when opening order history",
+   "description": "NullPointerException in OrderHistoryAdapter.onBindViewHolder when an order has no shipping address (digital goods). Crash rate 2.3% of Android 15 sessions.",
+   "status": "in_progress",
+   "priority": "P1",
+   "component": "mobile",
+   "reporter": "crashlytics",
+   "assignee": "raj.patel",
+   "created_at": "2026-10-22T11:05:00Z"
+  },
+  {
+   "id": 6,
+   "title": "Inventory count goes negative under concurrent purchases",
+   "description": "During the flash sale two customers bought the last unit of SKU HOM-502. inventory.quantity became -1. The decrement is done in application code after a separate SELECT, not atomically.",
+   "status": "open",
+   "priority": "P0",
+   "component": "inventory",
+   "reporter": "ops-oncall",
+   "assignee": "",
+   "created_at": "2026-10-27T19:44:00Z"
+  },
+  {
+   "id": 7,
+   "title": "CSV export truncates rows after 10,000",
+   "description": "Admin order export silently stops at 10,000 rows. Pagination loop exits when page size equals the hard-coded limit.",
+   "status": "resolved",
+   "priority": "P2",
+   "component": "admin",
+   "reporter": "finance-team",
+   "assignee": "dev.kim",
+   "created_at": "2026-09-30T10:00:00Z"
+  },
+  {
+   "id": 8,
+   "title": "Dark mode: unreadable text on payment form",
+   "description": "In dark mode the card number placeholder is #222 on #1e1e1e background. Fails WCAG contrast.",
+   "status": "open",
+   "priority": "P3",
+   "component": "web-ui",
+   "reporter": "designer.jo",
+   "assignee": "",
+   "created_at": "2026-10-10T13:30:00Z"
+  },
+  {
+   "id": 9,
+   "title": "API rate limiter blocks legitimate webhook retries",
+   "description": "Payment provider webhook retries are rejected with 429 because the rate limiter keys on source IP and the provider uses a shared egress IP.",
+   "status": "open",
+   "priority": "P2",
+   "component": "payments",
+   "reporter": "integrations",
+   "assignee": "",
+   "created_at": "2026-10-19T16:15:00Z"
+  },
+  {
+   "id": 10,
+   "title": "Session tokens logged in plaintext in access logs",
+   "description": "The nginx access log format includes the full Authorization header. Tokens are visible to anyone with log access. Security issue.",
+   "status": "in_progress",
+   "priority": "P0",
+   "component": "security",
+   "reporter": "sec-team",
+   "assignee": "ana.silva",
+   "created_at": "2026-10-26T07:55:00Z"
+  },
+  {
+   "id": 11,
+   "title": "Coupon code field accepts expired coupons",
+   "description": "Expired coupon SAVE20 is still accepted at checkout. The expiry check compares naive local time with UTC timestamps.",
+   "status": "open",
+   "priority": "P2",
+   "component": "checkout",
+   "reporter": "qa.ben",
+   "assignee": "",
+   "created_at": "2026-10-15T12:00:00Z"
+  },
+  {
+   "id": 12,
+   "title": "Image uploads fail for HEIC files from iPhone",
+   "description": "Uploading .heic product photos returns 'unsupported format'. Converter library lacks libheif.",
+   "status": "open",
+   "priority": "P3",
+   "component": "media",
+   "reporter": "seller-support",
+   "assignee": "",
+   "created_at": "2026-10-05T09:25:00Z"
+  },
+  {
+   "id": 13,
+   "title": "Duplicate order confirmation emails",
+   "description": "Some customers receive two confirmation emails. The email job is enqueued in both the order service and the payment webhook handler.",
+   "status": "closed",
+   "priority": "P3",
+   "component": "notifications",
+   "reporter": "support-bot",
+   "assignee": "dev.kim",
+   "created_at": "2026-09-20T15:00:00Z"
+  },
+  {
+   "id": 14,
+   "title": "Timeouts calling shipping rates API during peak hours",
+   "description": "GET /shipping/rates times out after 30s at peak. No circuit breaker or cache; each cart refresh triggers a new external call.",
+   "status": "open",
+   "priority": "P1",
+   "component": "shipping",
+   "reporter": "ops-oncall",
+   "assignee": "",
+   "created_at": "2026-10-24T18:10:00Z"
+  },
+  {
+   "id": 15,
+   "title": "Checkout total wrong when gift card and coupon combined",
+   "description": "Applying a gift card after a percentage coupon double-counts the discount. Rounding happens before the coupon is applied.",
+   "status": "open",
+   "priority": "P1",
+   "component": "checkout",
+   "reporter": "qa.ben",
+   "assignee": "",
+   "created_at": "2026-10-23T10:45:00Z"
+  },
+  {
+   "id": 16,
+   "title": "Memory leak in recommendation worker",
+   "description": "Worker RSS grows 200MB/hour until OOM-killed. Heap snapshot shows an unbounded LRU cache keyed by session id.",
+   "status": "open",
+   "priority": "P2",
+   "component": "recommendations",
+   "reporter": "sre.mia",
+   "assignee": "",
+   "created_at": "2026-10-16T20:30:00Z"
+  }
+ ],
+ "comments": [
+  {
+   "ticket_id": 2,
+   "author": "ana.silva",
+   "body": "Reproduced locally. Middleware returns redirect before checking cookie expiry.",
+   "created_at": "2026-10-19T09:00:00Z"
+  },
+  {
+   "ticket_id": 6,
+   "author": "ops-oncall",
+   "body": "Manually corrected stock. Need atomic UPDATE ... WHERE quantity >= n.",
+   "created_at": "2026-10-27T20:10:00Z"
+  }
+ ]
+}
