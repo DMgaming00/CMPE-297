@@ -1,0 +1,151 @@
+{
+  "reward": "throughput",
+  "train_seconds": 57.293895959854126,
+  "best_val_speedup": 1.7830977659031093,
+  "history": [
+    {
+      "timesteps": 20000,
+      "speedup": 1.7292486587230076,
+      "speedup_mean_per_seq": 1.8700136490050072,
+      "tau": 4.25249169435216,
+      "mean_depth": 5.446358212579265,
+      "n_seqs": 24,
+      "n_tokens": 3840
+    },
+    {
+      "timesteps": 40000,
+      "speedup": 1.7725492709067152,
+      "speedup_mean_per_seq": 1.891306941443147,
+      "tau": 4.0463645943098,
+      "mean_depth": 4.685315721693104,
+      "n_seqs": 24,
+      "n_tokens": 3840
+    },
+    {
+      "timesteps": 60000,
+      "speedup": 1.7437530242243244,
+      "speedup_mean_per_seq": 1.8826551176121804,
+      "tau": 4.151351351351352,
+      "mean_depth": 5.047881274409346,
+      "n_seqs": 24,
+      "n_tokens": 3840
+    },
+    {
+      "timesteps": 80000,
+      "speedup": 1.7734069361837501,
+      "speedup_mean_per_seq": 1.8871755772821135,
+      "tau": 4.020942408376963,
+      "mean_depth": 4.629391686439009,
+      "n_seqs": 24,
+      "n_tokens": 3840
+    },
+    {
+      "timesteps": 100000,
+      "speedup": 1.762652304161206,
+      "speedup_mean_per_seq": 1.8962261573137311,
+      "tau": 4.164859002169197,
+      "mean_depth": 5.0447269642342905,
+      "n_seqs": 24,
+      "n_tokens": 3840
+    },
+    {
+      "timesteps": 120000,
+      "speedup": 1.760500286973553,
+      "speedup_mean_per_seq": 1.8825942650812948,
+      "tau": 4.093816631130064,
+      "mean_depth": 4.887183814261072,
+      "n_seqs": 24,
+      "n_tokens": 3840
+    },
+    {
+      "timesteps": 140000,
+      "speedup": 1.7803301342841302,
+      "speedup_mean_per_seq": 1.900920039133119,
+      "tau": 4.050632911392405,
+      "mean_depth": 4.705411548368329,
+      "n_seqs": 24,
+      "n_tokens": 3840
+    },
+    {
+      "timesteps": 160000,
+      "speedup": 1.7746596271132637,
+      "speedup_mean_per_seq": 1.900380071254592,
+      "tau": 4.067796610169491,
+      "mean_depth": 4.781061262780573,
+      "n_seqs": 24,
+      "n_tokens": 3840
+    },
+    {
+      "timesteps": 180000,
+      "speedup": 1.771001333278788,
+      "speedup_mean_per_seq": 1.894511503784555,
+      "tau": 3.987538940809969,
+      "mean_depth": 4.61138615519826,
+      "n_seqs": 24,
+      "n_tokens": 3840
+    },
+    {
+      "timesteps": 200000,
+      "speedup": 1.7807526632979715,
+      "speedup_mean_per_seq": 1.8999172803458093,
+      "tau": 3.9669421487603307,
+      "mean_depth": 4.520124822719496,
+      "n_seqs": 24,
+      "n_tokens": 3840
+    },
+    {
+      "timesteps": 220000,
+      "speedup": 1.7768306593810124,
+      "speedup_mean_per_seq": 1.8836262382596347,
+      "tau": 3.855421686746988,
+      "mean_depth": 4.277741360349134,
+      "n_seqs": 24,
+      "n_tokens": 3840
+    },
+    {
+      "timesteps": 240000,
+      "speedup": 1.7764319418909837,
+      "speedup_mean_per_seq": 1.8942636706431388,
+      "tau": 3.9546858908341918,
+      "mean_depth": 4.49107813204271,
+      "n_seqs": 24,
+      "n_tokens": 3840
+    },
+    {
+      "timesteps": 260000,
+      "speedup": 1.777073800889257,
+      "speedup_mean_per_seq": 1.8876983567571717,
+      "tau": 3.8748738647830474,
+      "mean_depth": 4.326901098933588,
+      "n_seqs": 24,
+      "n_tokens": 3840
+    },
+    {
+      "timesteps": 280000,
+      "speedup": 1.7770213722893835,
+      "speedup_mean_per_seq": 1.8911581634658343,
+      "tau": 3.9183673469387754,
+      "mean_depth": 4.430292238078324,
+      "n_seqs": 24,
+      "n_tokens": 3840
+    },
+    {
+      "timesteps": 300000,
+      "speedup": 1.7830977659031093,
+      "speedup_mean_per_seq": 1.8987147514858382,
+      "tau": 3.914373088685015,
+      "mean_depth": 4.406230186567517,
+      "n_seqs": 24,
+      "n_tokens": 3840
+    },
+    {
+      "timesteps": 300000,
+      "speedup": 1.780932189136744,
+      "speedup_mean_per_seq": 1.8944391510427663,
+      "tau": 3.9223697650663945,
+      "mean_depth": 4.423123010659026,
+      "n_seqs": 24,
+      "n_tokens": 3840
+    }
+  ]
+}

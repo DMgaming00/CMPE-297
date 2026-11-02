@@ -1,0 +1,12 @@
+{"set": "humaneval", "text": "def fibonacci(n: int) -> int:\n    \"\"\"Return the n-th Fibonacci number.\"\"\"\n"}
+{"set": "humaneval", "text": "def is_palindrome(s: str) -> bool:\n    \"\"\"Return True if s reads the same backwards, ignoring case and spaces.\"\"\"\n"}
+{"set": "humaneval", "text": "def merge_sorted(a: list[int], b: list[int]) -> list[int]:\n    \"\"\"Merge two sorted lists into one sorted list.\"\"\"\n"}
+{"set": "humaneval", "text": "def count_vowels(text: str) -> int:\n    \"\"\"Count the vowels in text.\"\"\"\n"}
+{"set": "gsm8k", "text": "A store sells pencils at 3 for $1. How much do 27 pencils cost?"}
+{"set": "gsm8k", "text": "Tom reads 12 pages a day. How many days does he need to finish a 300-page book?"}
+{"set": "alpaca", "text": "Give three tips for staying healthy."}
+{"set": "alpaca", "text": "Explain what a hash map is to a beginner programmer."}
+{"set": "mtbench", "text": "Write a short travel blog post about a trip to Hawaii, highlighting cultural experiences."}
+{"set": "mtbench", "text": "Draft a professional email asking a manager for feedback on a quarterly report."}
+{"set": "nq", "text": "who wrote the novel pride and prejudice"}
+{"set": "nq", "text": "what is the capital city of australia"}

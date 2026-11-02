@@ -1,0 +1,20 @@
+{
+  "timestamp_utc": "2026-11-02T00:43:34.891033+00:00",
+  "python": "3.12.15",
+  "platform": "macOS-26.5.2-arm64-arm-64bit",
+  "machine": "arm64",
+  "processor": "arm",
+  "git_commit": "825c97f4a43d61e6592d671a327709dd61996828",
+  "git_dirty": true,
+  "numpy": "2.5.4",
+  "torch": "2.15.0",
+  "transformers": "5.22.1",
+  "stable_baselines3": "2.9.2",
+  "gymnasium": "1.4.0",
+  "mps_available": true,
+  "cuda_available": false,
+  "target": "openai-community/gpt2-medium",
+  "draft": "distilbert/distilgpt2",
+  "device": "mps",
+  "dtype": "torch.float16"
+}

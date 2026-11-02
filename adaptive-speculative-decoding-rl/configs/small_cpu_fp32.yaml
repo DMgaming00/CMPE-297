@@ -1,0 +1,26 @@
+# Exactness check: the SAME models as small.yaml but on CPU in fp32. Speculative decoding must reproduce the
+# target's greedy output exactly here; fp16 on MPS may flip near-ties. Use with:
+# NOTE: 64 new tokens and 1 prompt per test set (4 prompts), because fp32 decoding on an 8 GB laptop under memory
+# pressure was too slow for the full setting.
+#   ltdmini eval-real --config configs/small_cpu_fp32.yaml --policies-from results/gpt2m-distilgpt2 --n-prompts 1
+name: gpt2m-distilgpt2-cpu-fp32
+out_dir: results/gpt2m-distilgpt2/cpu_fp32
+models:
+  target: openai-community/gpt2-medium
+  draft: distilbert/distilgpt2
+  device: cpu
+  dtype: float32
+data:
+  train: [humaneval]
+  val: [humaneval]
+  test: [mtbench, gsm8k, alpaca, nq]
+  n_train: 100
+  n_val: 24
+  n_test_per_set: 30
+  max_prompt_tokens: 512
+decode:
+  max_new_tokens: 64
+  dmax: 12
+train:
+  total_timesteps: 300000
+  eval_every: 20000

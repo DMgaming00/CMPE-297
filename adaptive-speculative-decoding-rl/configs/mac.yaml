@@ -1,0 +1,23 @@
+# Main experiment: Qwen2.5-1.5B-Instruct target, Qwen2.5-0.5B-Instruct draft (shared tokenizer).
+# Fits an 8 GB Apple Silicon Mac in fp16 (~4 GB of weights). Expect several hours; run overnight.
+name: qwen2.5-1.5b-0.5b
+out_dir: results/qwen2.5-1.5b-0.5b
+models:
+  target: Qwen/Qwen2.5-1.5B-Instruct
+  draft: Qwen/Qwen2.5-0.5B-Instruct
+  device: auto
+  dtype: auto
+data:
+  train: [humaneval]
+  val: [humaneval]
+  test: [mtbench, gsm8k, alpaca, nq]
+  n_train: 80
+  n_val: 20
+  n_test_per_set: 25
+  max_prompt_tokens: 512
+decode:
+  max_new_tokens: 160
+  dmax: 12
+train:
+  total_timesteps: 300000
+  eval_every: 20000

@@ -1,0 +1,51 @@
+{
+  "name": "gpt2m-distilgpt2-cpu-fp32",
+  "out_dir": "results/gpt2m-distilgpt2/cpu_fp32",
+  "models": {
+    "target": "openai-community/gpt2-medium",
+    "draft": "distilbert/distilgpt2",
+    "dtype": "float32",
+    "device": "cpu",
+    "revision_target": null,
+    "revision_draft": null
+  },
+  "data": {
+    "train": [
+      "humaneval"
+    ],
+    "val": [
+      "humaneval"
+    ],
+    "test": [
+      "mtbench",
+      "gsm8k",
+      "alpaca",
+      "nq"
+    ],
+    "n_train": 100,
+    "n_val": 24,
+    "n_test_per_set": 30,
+    "max_prompt_tokens": 512,
+    "seed": 0
+  },
+  "decode": {
+    "max_new_tokens": 64,
+    "dmax": 12,
+    "temperature": 0.0
+  },
+  "train": {
+    "reward": "throughput",
+    "total_timesteps": 300000,
+    "n_steps": 2048,
+    "batch_size": 256,
+    "learning_rate": 0.0003,
+    "gamma": 0.99,
+    "net_arch": [
+      64,
+      64
+    ],
+    "eval_every": 20000,
+    "timing_noise": 0.05,
+    "seed": 0
+  }
+}

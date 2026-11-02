@@ -1,0 +1,18 @@
+{
+  "fixed": {
+    "policy": "fixed-k3",
+    "val_speedup": 1.6945126068747733
+  },
+  "confidence": {
+    "policy": "confidence-h0.70",
+    "val_speedup": 1.7796657378822172
+  },
+  "entropy": {
+    "policy": "entropy-h0.087",
+    "val_speedup": 1.6969930040926537
+  },
+  "cumulative": {
+    "policy": "cumulative-h0.65",
+    "val_speedup": 1.7750913426191894
+  }
+}

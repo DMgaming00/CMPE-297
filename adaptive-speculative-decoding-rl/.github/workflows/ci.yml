@@ -1,0 +1,26 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -e ".[dev]"
+      - run: ruff check src tests
+      - run: pytest tests/unit -q
+      - run: ltdmini synthetic-demo --out /tmp/demo --train-steps 0
+  torch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install -e ".[all]"
+      - run: pytest tests/torch -q
+      - run: ltdmini all --config configs/smoke.yaml
+      - run: ltdmini robust --config configs/smoke.yaml --seeds 1
+      - run: ltdmini behaviour --config configs/smoke.yaml
+      - run: ltdmini report --config configs/smoke.yaml

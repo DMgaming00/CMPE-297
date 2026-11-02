@@ -1,0 +1,18 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+.ruff_cache/
+.DS_Store
+# large intermediate artifacts (publish via GitHub Releases if needed)
+# (the main run's traces are small and ARE committed so the simulator stages can be re-run without models)
+results/**/traces_*.npz
+results/**/timing_raw.json
+!results/gpt2m-distilgpt2/traces_*.npz
+!results/gpt2m-distilgpt2/timing_raw.json
+results/**/*.log
+results/qwen2.5-1.5b-0.5b/
+*_backup.jsonl
+results/smoke/
+results/synthetic-demo/

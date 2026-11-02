@@ -1,0 +1,24 @@
+# Exactness check: the SAME models as small.yaml, on the GPU (MPS) but in fp32 instead of fp16. Speculative decoding must reproduce the
+# target's greedy output exactly here; fp16 on MPS may flip near-ties. Use with:
+#   ltdmini eval-real --config configs/small_mps_fp32.yaml --policies-from results/gpt2m-distilgpt2 --n-prompts 4
+name: gpt2m-distilgpt2-mps-fp32
+out_dir: results/gpt2m-distilgpt2/mps_fp32
+models:
+  target: openai-community/gpt2-medium
+  draft: distilbert/distilgpt2
+  device: mps
+  dtype: float32
+data:
+  train: [humaneval]
+  val: [humaneval]
+  test: [mtbench, gsm8k, alpaca, nq]
+  n_train: 100
+  n_val: 24
+  n_test_per_set: 30
+  max_prompt_tokens: 512
+decode:
+  max_new_tokens: 160
+  dmax: 12
+train:
+  total_timesteps: 300000
+  eval_every: 20000

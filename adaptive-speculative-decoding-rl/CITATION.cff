@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this replication, please cite the original paper and this repository."
+title: "LTD-Mini: a laptop-scale replication of Learning to Draft (ICLR 2026)"
+authors:
+  - family-names: Mulchandani
+    given-names: Dev
+version: 0.1.0
+license: MIT
+references:
+  - type: conference-paper
+    title: "Learning to Draft: Adaptive Speculative Decoding with Reinforcement Learning"
+    authors:
+      - family-names: Zhang
+        given-names: Jiebin
+      - name: "et al."
+    conference:
+      name: "International Conference on Learning Representations (ICLR)"
+    year: 2026
+    url: "https://arxiv.org/abs/2603.01639"

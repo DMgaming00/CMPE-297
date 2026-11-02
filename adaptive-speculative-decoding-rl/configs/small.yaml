@@ -1,0 +1,25 @@
+# Small-laptop run (8 GB Macs): GPT-2 medium (355M) target, DistilGPT-2 (82M) draft, shared tokenizer.
+# Chosen after profiling candidate pairs: SmolLM2-360M/135M had a draft only ~1.7x cheaper than the target on MPS
+# (both launch-overhead-bound, 30 vs 32 layers); Qwen2.5-1.5B/0.5B thrashed swap on an 8 GB machine.
+# Base models (no chat template): prompts are fed as raw text. GPT-2 context limit is 1024 tokens.
+name: gpt2m-distilgpt2
+out_dir: results/gpt2m-distilgpt2
+models:
+  target: openai-community/gpt2-medium
+  draft: distilbert/distilgpt2
+  device: auto
+  dtype: auto
+data:
+  train: [humaneval]
+  val: [humaneval]
+  test: [mtbench, gsm8k, alpaca, nq]
+  n_train: 100
+  n_val: 24
+  n_test_per_set: 30
+  max_prompt_tokens: 512
+decode:
+  max_new_tokens: 160
+  dmax: 12
+train:
+  total_timesteps: 300000
+  eval_every: 20000

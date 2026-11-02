@@ -1,0 +1,25 @@
+# Zero-download pipeline check: random tiny models, a few prompts, short PPO run.
+# Runs on any laptop CPU in a few minutes. NUMBERS ARE NOT RESULTS.
+name: smoke
+out_dir: results/smoke
+models:
+  target: random-tiny
+  draft: random-tiny-draft
+  device: cpu
+  dtype: float32
+data:
+  train: [humaneval]
+  val: [humaneval]
+  test: [gsm8k, alpaca]
+  n_train: 8
+  n_val: 4
+  n_test_per_set: 4
+  max_prompt_tokens: 256
+decode:
+  max_new_tokens: 48
+  dmax: 8
+train:
+  total_timesteps: 8192
+  n_steps: 1024
+  batch_size: 256
+  eval_every: 4096
