@@ -1,0 +1,49 @@
+{
+  "name": "genux-codelabs",
+  "author": "Dev Mulchandani",
+  "license": "MIT",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "GenUX / Generative UI course repository: A2UI, AG-UI, MCP Apps, JSON Render, OpenUI and harness integration.",
+  "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm -r --parallel --filter \"./apps/*\" dev",
+    "dev:a2ui": "pnpm --filter @genux/app-a2ui dev",
+    "dev:agui": "pnpm --filter @genux/app-agui dev",
+    "dev:mcp": "pnpm --filter @genux/app-mcp-apps dev",
+    "dev:json-render": "pnpm --filter @genux/app-json-render dev",
+    "dev:openui": "pnpm --filter @genux/app-openui dev",
+    "dev:harness": "pnpm --filter @genux/app-harness dev",
+    "dev:mixed": "pnpm --filter @genux/app-mixed-mode dev",
+    "harness:cli": "pnpm --filter @genux/harness cli",
+    "mcp:stdio": "pnpm --filter @genux/mcp-server stdio",
+    "lint": "eslint .",
+    "typecheck": "pnpm -r typecheck",
+    "test": "vitest run",
+    "build": "pnpm -r --filter \"./apps/*\" build"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.0",
+    "eslint": "^9.39.0",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.46.0",
+    "vitest": "^3.2.4",
+    "tsx": "^4.20.0",
+    "@types/node": "^22.10.0",
+    "@genux/schemas": "workspace:*",
+    "@genux/shared": "workspace:*",
+    "@genux/ui": "workspace:*",
+    "@genux/harness": "workspace:*",
+    "@genux/mcp-server": "workspace:*",
+    "@ag-ui/core": "latest",
+    "@modelcontextprotocol/sdk": "^1.20.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "@openuidev/react-lang": "latest",
+    "@types/react": "^19.2.0"
+  }
+}

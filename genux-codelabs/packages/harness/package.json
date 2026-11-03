@@ -1,0 +1,24 @@
+{
+  "name": "@genux/harness",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p .",
+    "cli": "tsx src/cli.ts"
+  },
+  "dependencies": {
+    "@genux/schemas": "workspace:*",
+    "@genux/shared": "workspace:*",
+    "zod": "^4.1.0",
+    "@ag-ui/core": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0"
+  }
+}
