@@ -1,0 +1,29 @@
+[project]
+name = "rsi-self-improvement-lab"
+version = "1.0.0"
+description = "Three recent recursive-self-improvement methods (Dream-RSI, Budget RSI, SO-RSI) on one shared heuristic-discovery problem"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = ["numpy>=1.26", "matplotlib>=3.8"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.5"]
+
+[tool.setuptools.packages.find]
+include = ["src*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 130
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+ignore = ["E731", "B905"]
+
+[tool.ruff.lint.per-file-ignores]
+"codelabs/*" = ["E402", "E501"]  # codelabs add the repo root to sys.path before importing src

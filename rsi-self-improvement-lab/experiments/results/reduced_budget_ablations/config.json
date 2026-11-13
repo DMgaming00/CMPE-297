@@ -1,0 +1,91 @@
+{
+  "name": "reduced_budget",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+  ],
+  "train_tasks": [
+    {
+      "name": "uniform",
+      "kind": "uniform",
+      "seed": 11
+    },
+    {
+      "name": "clusters",
+      "kind": "clusters",
+      "seed": 12,
+      "n_clusters": 4,
+      "spread": 0.07
+    },
+    {
+      "name": "ring",
+      "kind": "ring",
+      "seed": 13,
+      "spread": 0.08
+    }
+  ],
+  "held_out_tasks": [
+    {
+      "name": "clusters_tight",
+      "kind": "clusters",
+      "seed": 21,
+      "n_clusters": 6,
+      "spread": 0.04
+    },
+    {
+      "name": "grid_jitter",
+      "kind": "grid",
+      "seed": 22,
+      "spread": 0.06
+    }
+  ],
+  "n_train": 12,
+  "n_test": 30,
+  "n_cities": 30,
+  "adapt_evals": 20,
+  "deploy_evals": 20,
+  "dream_candidates": 4,
+  "dream_rhos": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "dream_lambda": 0.05,
+  "dream_deploy_rho": 1.0,
+  "budget_label_edits": 32,
+  "budget_fit_instances": 4,
+  "budget_proposals": 8,
+  "so_episode_evals": 10,
+  "so_probe_instances": 3,
+  "so_validation_instances": 6
+}

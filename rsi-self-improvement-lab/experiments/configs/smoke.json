@@ -1,0 +1,10 @@
+{
+  "name": "smoke",
+  "seeds": [0, 1],
+  "adapt_evals": 20,
+  "deploy_evals": 20,
+  "n_train": 6,
+  "n_test": 10,
+  "budget_label_edits": 24,
+  "so_episode_evals": 10
+}
